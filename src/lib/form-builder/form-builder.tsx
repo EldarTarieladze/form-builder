@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, TextField, Button } from '@material-ui/core'
+import { Box, Paper, Typography, TextField, Button ,Options, Select } from '@material-ui/core'
 import { log } from 'console'
 import { StringDecoder } from 'node:string_decoder'
 import { getConstantValue } from 'typescript'
@@ -41,6 +41,21 @@ export const FormBuilder = ({ schema, onSubmit }: Props) => {
         </Typography>
         {
           schema.properties.map((item) => {
+            // {item.type == "enum" &&
+            // <>
+            // <Select
+            // placeholder={item.name}
+            // >
+            //   {item.options.map((it) =>{
+            //     return(
+            //       <></>
+            //     )
+            //   })}
+
+            // </Select>
+
+
+            // </>}
             return(
               <>
                 <TextField
