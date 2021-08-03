@@ -67,7 +67,7 @@ export const FormBuilder = ({ jsonData, onSubmit }: Props) => {
         </Typography>
 
         {
-          formRender()
+          jsonData.type == "object" ? (<>{formRender()}</>) : (<><div>invalidjson</div></>)
         }
         {/* Code here */}
         <Button

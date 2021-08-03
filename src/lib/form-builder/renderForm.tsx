@@ -207,6 +207,19 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
           </Paper>
         </Paper>
       );
+    }else{
+      return(
+        <>
+      <Paper>
+        <Box>
+        <Typography variant="h5" gutterBottom>
+          invalid type at properties[{index}].{element.type}
+          </Typography>
+        </Box>
+      </Paper>
+      </>
+      )
+
     }
   };
 
