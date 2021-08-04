@@ -20,13 +20,15 @@ type Props = {
   // schema: ObjectSchema,
   index: any;
   element: any;
+  handleAdd: any
+  handleDetele: any
+  saveChange: any
 };
 
-export const RenderNastedForm = ({ element, index }: Props) => {
+export const RenderNastedForm = ({ element, index, handleAdd, handleDetele, saveChange }: Props) => {
   const [country, setCountry] = useState("");
 
   const nestedFormContent = (item: any, itemIndex: any) => {
-    console.log(item);
     return (
       <>
         <Paper
@@ -42,13 +44,14 @@ export const RenderNastedForm = ({ element, index }: Props) => {
             {item.label}
           </Typography>
           {item.properties.map((nestedObj: any, nestedIndex: any) => {
-            console.log(nestedObj);
-            return (
+             return (
               <>
               <RenderForm
                       element={nestedObj}
-                      index={nestedIndex}
-                      handleAdd="null"
+                      index={itemIndex + "-" + nestedIndex}
+                      handleAdd={handleAdd}
+                      handleDetele={handleDetele}
+                      saveChange={saveChange}
                     />
               </>
             );

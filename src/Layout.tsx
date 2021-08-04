@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core'
 import { ReactNode, useState } from 'react'
 import studentProfileSchemaJson from 'schemas/student-profile.json'
+import newstudjson from 'schemas/newJson.json'
+
 import testSchemaJson from 'schemas/test.json'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
@@ -32,12 +34,15 @@ const theme = createTheme({
 })
 
 type Props = {
-  render: (jsonInput: string) => ReactNode
+  render: (jsonInput: string, newJson: string) => ReactNode
 }
 
 export const Layout = (props: Props) => {
   const [jsonInput, setJsonInput] = useState(
     JSON.stringify(studentProfileSchemaJson, null, 2),
+  )
+  const [newJson, setNewJson] = useState(
+    JSON.stringify(newstudjson, null, 2),
   )
 
   return (
@@ -81,7 +86,7 @@ export const Layout = (props: Props) => {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper>{props.render(jsonInput)}</Paper>
+              <Paper>{props.render(jsonInput, newJson)}</Paper>
             </Grid>
           </Grid>
         </Box>

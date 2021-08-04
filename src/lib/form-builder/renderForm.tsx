@@ -21,43 +21,11 @@ type Props = {
   index: any;
   element: ObjectSchema;
   handleAdd: any;
+  handleDetele: any
+  saveChange: any
 };
 
-export const RenderForm = ({ element, index, handleAdd }: Props) => {
-  const [country, setCountry] = useState("");
-
-  // const nestedFormContent = (item: any, itemIndex: any) => {
-  //   return (
-  //     <>
-  //       <Paper
-  //         style={{
-  //           marginTop: 7,
-  //           padding: 20,
-  //           display: "flex",
-  //           flexDirection: "column",
-  //         }}
-  //         variant="outlined"
-  //       >
-  //         <Typography variant="h5" gutterBottom>
-  //           {item.label}
-  //         </Typography>
-  //         {item.properties.map((nestedObj: any, nestedIndex: any) => {
-  //           console.log(nestedObj)
-  //           return (
-  //             <>
-  //               {nestedObj.type !== "object" ? (
-  //                 <>{formContent(nestedObj, nestedIndex)}</>
-  //               ) : (
-  //                 <>{nestedFormContent(nestedObj, nestedIndex)}
-  //                 </>
-  //               )}
-  //             </>
-  //           );
-  //         })}
-  //       </Paper>
-  //     </>
-  //   );
-  // };
+export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange }: Props) => {
   const formContent = (fields: any, i: any) => {
     if (fields.type == "string" || fields.type == "number") {
       return (
@@ -69,6 +37,9 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
             id="outlined-basic"
             label={fields.label}
             variant="outlined"
+            onChange={(e) => {
+              saveChange(fields, i, e.target.value)
+            }}
           ></TextField>
         </>
       );
@@ -99,6 +70,9 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
                         id="outlined-basic"
                         label={element.label}
                         variant="outlined"
+                        onChange={(e) => {
+                          saveChange(fields, i+"-"+indx, e.target.value)
+                        }}
                       ></TextField>
                     </>
                   ) : (
@@ -106,7 +80,10 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
                     {/* {nestedFormContent(element, indx)} */}
                         <RenderNastedForm
                           element={element}
-                          index={indx}
+                          index={i + ";" + indx}
+                          handleAdd={handleAdd}
+                          handleDetele={handleDetele}
+                          saveChange={saveChange}
                         />
                     </>
                   )}
@@ -126,7 +103,6 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
         </>
       );
     } else if (fields.type == "enum") {
-      console.log(fields);
 
       return (
         <>
@@ -134,7 +110,7 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
             {/* <InputLabel id="demo-simple-select-outlined-label">
               {fields.label}
             </InputLabel> */}
-            <select>
+            <select style={{padding: 10, border: '1px solid lightgray',borderRadius: 5}}>
               {fields.options.map((opt: any) => {
                 return (
                   <>
@@ -148,7 +124,6 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
       );
     } else if (fields.type == "array") {
       fields.item.map((itm: any) => {
-        console.log(itm);
       });
       return (
         <Paper
@@ -175,15 +150,41 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
                         id="outlined-basic"
                         label={nestedObject.label}
                         variant="outlined"
+                        onChange={(e) => {
+                          saveChange(fields, i, e.target.value)
+                        }}
                       ></TextField>
                     </>
                   ) : (
                     <>
+                    <div
+                      style={{
+                        display:"flex",
+                        alignItems: "center"
+                      }}
+                    >
                     <RenderNastedForm
                           element={nestedObject}
-                          index={nestedObjIndex}
+                          index={i + "-" +nestedObjIndex}
+                          handleAdd={handleAdd}
+                          handleDetele={handleDetele}
+                          saveChange={saveChange}
                         />
-
+                        <Button
+                          style={{
+                            marginTop: "20px",
+                            width: "100px",
+                            height: "50px",
+                            marginLeft: 20
+                          }}
+                          variant="outlined"
+                          onClick={() => {
+                            handleDetele(nestedObjIndex, fields)
+                          }}
+                        >
+                          Remove
+                        </Button>
+                        </div>
                     </>
                   )}
                 </>
@@ -199,7 +200,7 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
               }}
               variant="outlined"
               onClick={() => {
-                handleAdd(i);
+                handleAdd(i, fields);
               }}
             >
               Add
@@ -213,7 +214,7 @@ export const RenderForm = ({ element, index, handleAdd }: Props) => {
       <Paper>
         <Box>
         <Typography variant="h5" gutterBottom>
-          invalid type at properties[{index}].{element.type}
+          invalid type at properties[{index}].type={element.type}
           </Typography>
         </Box>
       </Paper>
