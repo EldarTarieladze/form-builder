@@ -1,43 +1,92 @@
 import { Box, Paper, Typography, Button } from "@material-ui/core";
-import { StringDecoder } from "node:string_decoder";
 import { EndOfLineState, getConstantValue } from "typescript";
 import { ObjectSchema } from "./types";
 import React, { useEffect, useState } from "react";
 import { RenderForm } from "./renderForm";
-import { AnyARecord } from "dns";
-import { ENOLINK } from "node:constants";
-import testSchemaJson from "schemas/test.json";
-import newJson from "./../../schemas/newJson.json"
 type Props = {
   // schema: ObjectSchema,
   jsonData: ObjectSchema;
   onSubmit: (values: any) => void;
-  newJson: any
 };
 
-export const FormBuilder = ({ jsonData, onSubmit, newJson }: Props) => {
+export const FormBuilder = ({ jsonData, onSubmit }: Props) => {
   const [watcher, setWatcher] = useState(false);
   const App = () => {};
   const handleAdd = (index: any, eln: any) => {
     if (index.toString().includes("-")) {
-      let tt = index.split("-");
-      let x = eln.item[0]
-      eln.item = [...eln.item, JSON.parse(JSON.stringify(eln.item[0]))]
-
+      let JsonclearValue = JSON.parse(JSON.stringify(eln.item[0]))
+      JsonclearValue.properties.map((item: any) => {item.value = ""})
+      eln.item = [...eln.item,JsonclearValue ]
     } else {
-      let x = eln.item[0]
-      eln.item = [...eln.item, JSON.parse(JSON.stringify(eln.item[0]))]
+      let JsonclearValue = JSON.parse(JSON.stringify(eln.item[0]))
+      JsonclearValue.properties.map((item: any) => {item.value = ""})
+      eln.item = [...eln.item, JsonclearValue]
     }
     setWatcher(!watcher);
   };
 
+  let newJSON : any = {}
+
+  const nestedObjectJson = (
+    item: any,
+    previousItem: any,
+    index: any,
+  ) => {
+    if (
+      item.type === 'string' ||
+      item.type === 'number' ||
+      item.type === 'enum'
+    ) {
+      submittJson(item, index, previousItem)
+    } else if (item.type === 'object') {
+      previousItem[index] = {}
+
+      previousItem[index][item['name']] = {}
+      item.properties.map((el: any, indexx: number) => {
+        console.log(el)
+          submittJson(el, index, previousItem[index][item['name']])
+      })
+    } else if (item.type === 'array') {
+      previousItem[item['name']] = []
+      item.item.map((el: any, index: number) => {
+        submittJson(el, index, previousItem[item['name']])
+      })
+    }
+
+  }
+
+const submittJson = (item: any, index: any, newItem: any) => {
+  if(item.type == "string" || item.type == "number" || item.type == "enum"){
+    newItem[item['name']] = {}
+    newItem[item['name']] = item.value ? item.value : "null"
+  }else if (item.type === 'object') {
+    newItem[item['name']] = {}
+    item.properties.map((el: any, ind: any) => {
+      nestedObjectJson(el, newItem[item['name']], ind)
+    })
+    }else if (item.type === 'array') {
+      newItem[item['name']] = []
+      item.item.map((el: any, indx: any) => {
+        nestedObjectJson(el, newItem[item['name']], indx)
+      })
+    }
+}
+
+const genJson = () =>{
+  jsonData.properties.map((item: any, index: number) => {
+    submittJson(item, index, newJSON)
+})
+console.log(newJSON)
+}
+
+
+
+
+
   const handleDetele = (index: any, eln: any) => {
-    console.log( "sada")
     let arr2 = JSON.parse(JSON.stringify(eln.item))
     let arr = arr2.filter((value:any, i:any) =>i !==index );
-    console.log(arr)
     eln.item = [...arr]
-    console.log(eln.item)
     setWatcher(!watcher);
   };
   let vv = false;
@@ -48,8 +97,7 @@ export const FormBuilder = ({ jsonData, onSubmit, newJson }: Props) => {
       arr.shift();
       let x = index.toString()
       saveChange(jsonData.properties[x[0]], arr, value);
-    } else if (element.type == "string" || element.type == "number") {
-      console.log(element)
+    } else if (element.type == "string" || element.type == "number" || element.type == "enum" || element.type == "boolean") {
       element.value = value;
       vv= false
     } else if (element.type == "object") {
@@ -61,11 +109,12 @@ export const FormBuilder = ({ jsonData, onSubmit, newJson }: Props) => {
       arr.shift();
       saveChange(element.item[index[0]], arr, value);
     }
+
     console.log(jsonData)
-    // element.value = value;
   };
 
   useEffect(() => {
+
     formRender();
   }, [watcher]);
 
@@ -97,6 +146,11 @@ export const FormBuilder = ({ jsonData, onSubmit, newJson }: Props) => {
         display="flex"
         flexDirection="column"
         component="form"
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit(newJSON);
+          genJson()
+        }}
       >
         <Typography variant="h5" gutterBottom>
           {jsonData.label}
@@ -115,9 +169,9 @@ export const FormBuilder = ({ jsonData, onSubmit, newJson }: Props) => {
           variant="contained"
           color="primary"
           type="submit"
-          onClick={() => {
-            onSubmit(jsonData);
-          }}
+          // onSubmit={(e) => {
+
+          // }}
         >
           Submitt
         </Button>

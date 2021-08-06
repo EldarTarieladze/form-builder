@@ -19,7 +19,7 @@ import { RenderForm } from "./renderForm";
 type Props = {
   // schema: ObjectSchema,
   index: any;
-  element: any;
+  element: ObjectSchema;
   handleAdd: any
   handleDetele: any
   saveChange: any

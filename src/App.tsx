@@ -9,7 +9,7 @@ export const App = () => {
 
   return (
     <Layout
-      render={(jsonInput, newJson) => {
+      render={jsonInput => {
         // `jsonInput` is a raw string. You need to convert it to the object of `ObjectSchema` type.
         // There are two types of validations that must take place:
         // 1. Check that `jsonInput` is a valid json.
@@ -22,7 +22,6 @@ export const App = () => {
           <>
             <FormBuilder
               jsonData={JSON.parse(jsonInput)}
-              newJson={JSON.parse(newJson)}
               // schema={studentProfileSchema}
               onSubmit={values => {
                 setSubmittedData(values)

@@ -16,6 +16,10 @@ import { getConstantValue } from "typescript";
 import { ObjectSchema } from "./types";
 import React, { useEffect, useState } from "react";
 import { RenderNastedForm } from "./renderNastedForm"
+import {TextFields} from "./textFields"
+import {SelectFields} from "./selectFields"
+import { CheckBoxFields } from "./booleanFIelds"
+
 type Props = {
   // schema: ObjectSchema,
   index: any;
@@ -26,21 +30,29 @@ type Props = {
 };
 
 export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange }: Props) => {
+  const [inputfd, setInputfd] = useState("")
   const formContent = (fields: any, i: any) => {
     if (fields.type == "string" || fields.type == "number") {
       return (
         <>
-          <TextField
+          {/* <TextField
             name={fields.name}
             type={fields.inputType ? fields.inputType : fields.type}
             required={fields.required}
             id="outlined-basic"
+            value={fields.value ? fields.value : ""}
             label={fields.label}
             variant="outlined"
             onChange={(e) => {
               saveChange(fields, i, e.target.value)
             }}
-          ></TextField>
+          ></TextField> */}
+                        < TextFields
+                        element={fields}
+                        fields={fields}
+                        indx={i}
+                        saveChange={saveChange}
+                      />
         </>
       );
     } else if (fields.type == "object") {
@@ -63,17 +75,26 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                 <>
                   {element.type !== "object" ? (
                     <>
-                      <TextField
+                      {/* <TextField
                         name={element.name}
                         type={element.type}
                         required={element.required}
                         id="outlined-basic"
+                        value={element.value ? element.value : inputfd}
                         label={element.label}
                         variant="outlined"
                         onChange={(e) => {
-                          saveChange(fields, i+"-"+indx, e.target.value)
+                          setInputfd(e.target.value)
+                          saveChange(fields, i+"-"+indx, e.target.name)
                         }}
-                      ></TextField>
+                      ></TextField> */}
+
+                      < TextFields
+                        element={element}
+                        fields={fields}
+                        indx={i+"-"+ indx}
+                        saveChange={saveChange}
+                      />
                     </>
                   ) : (
                     <>
@@ -96,10 +117,16 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
     } else if (fields.type == "boolean") {
       return (
         <>
-          <Typography variant="h6" gutterBottom>
+
+        <CheckBoxFields
+            element={fields}
+            index={i}
+            saveChange={saveChange}
+          />
+          {/* <Typography variant="h6" gutterBottom>
             <Checkbox />
             {fields.label}
-          </Typography>
+          </Typography> */}
         </>
       );
     } else if (fields.type == "enum") {
@@ -107,10 +134,13 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
       return (
         <>
           <FormControl variant="outlined">
-            {/* <InputLabel id="demo-simple-select-outlined-label">
-              {fields.label}
-            </InputLabel> */}
-            <select style={{padding: 10, border: '1px solid lightgray',borderRadius: 5}}>
+
+            <SelectFields
+              fields={fields}
+              indx={i}
+              saveChange={saveChange}
+              />
+            {/* <select style={{padding: 10, border: '1px solid lightgray',borderRadius: 5}}>
               {fields.options.map((opt: any) => {
                 return (
                   <>
@@ -118,13 +148,11 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                   </>
                 );
               })}
-            </select>
+            </select> */}
           </FormControl>
         </>
       );
     } else if (fields.type == "array") {
-      fields.item.map((itm: any) => {
-      });
       return (
         <Paper
           style={{ marginTop: "20px", padding: "20px" }}
@@ -143,7 +171,7 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                   {nestedObject.type !== "object" ? (
                     <>
                     {/* {nestedFormContent(nestedObject, nestedObjIndex)} */}
-                    <TextField
+                    {/* <TextField
                         name={nestedObject.name}
                         type={nestedObject.type}
                         required={nestedObject.required}
@@ -153,7 +181,13 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                         onChange={(e) => {
                           saveChange(fields, i, e.target.value)
                         }}
-                      ></TextField>
+                      ></TextField> */}
+                      <TextFields
+                        fields={fields}
+                        indx={i}
+                        saveChange={saveChange}
+                        element={nestedObject}
+                        />
                     </>
                   ) : (
                     <>
@@ -177,6 +211,7 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                             height: "50px",
                             marginLeft: 20
                           }}
+                          disabled={fields.item.length> 1 ? false : true}
                           variant="outlined"
                           onClick={() => {
                             handleDetele(nestedObjIndex, fields)
