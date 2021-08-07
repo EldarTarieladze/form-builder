@@ -19,7 +19,7 @@ export const CheckBoxFields = ({ element, index, saveChange }: Props) => {
             <Checkbox
               checked={fields.value ? fields.value : booleanValue}
                 onChange={(e) =>{
-                  console.log(e.target.checked)
+                  console.log(e.target.checked, indx)
                   setbooleanValue(e.target.checked)
                   saveChange(fields, indx, e.target.checked)
                 }}

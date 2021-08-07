@@ -15,44 +15,38 @@ import { StringDecoder } from "node:string_decoder";
 import { getConstantValue } from "typescript";
 import { ObjectSchema } from "./types";
 import React, { useEffect, useState } from "react";
-import { RenderNastedForm } from "./renderNastedForm"
-import {TextFields} from "./textFields"
-import {SelectFields} from "./selectFields"
-import { CheckBoxFields } from "./booleanFIelds"
+import { RenderNastedForm } from "./renderNastedForm";
+import { TextFields } from "./textFields";
+import { SelectFields } from "./selectFields";
+import { CheckBoxFields } from "./booleanFIelds";
 
 type Props = {
   // schema: ObjectSchema,
   index: any;
   element: ObjectSchema;
   handleAdd: any;
-  handleDetele: any
-  saveChange: any
+  handleDetele: any;
+  saveChange: any;
 };
 
-export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange }: Props) => {
-  const [inputfd, setInputfd] = useState("")
+export const RenderForm = ({
+  element,
+  index,
+  handleAdd,
+  handleDetele,
+  saveChange,
+}: Props) => {
+  const [inputfd, setInputfd] = useState("");
   const formContent = (fields: any, i: any) => {
     if (fields.type == "string" || fields.type == "number") {
       return (
         <>
-          {/* <TextField
-            name={fields.name}
-            type={fields.inputType ? fields.inputType : fields.type}
-            required={fields.required}
-            id="outlined-basic"
-            value={fields.value ? fields.value : ""}
-            label={fields.label}
-            variant="outlined"
-            onChange={(e) => {
-              saveChange(fields, i, e.target.value)
-            }}
-          ></TextField> */}
-                        < TextFields
-                        element={fields}
-                        fields={fields}
-                        indx={i}
-                        saveChange={saveChange}
-                      />
+          <TextFields
+            element={fields}
+            fields={fields}
+            indx={i}
+            saveChange={saveChange}
+          />
         </>
       );
     } else if (fields.type == "object") {
@@ -75,37 +69,23 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                 <>
                   {element.type !== "object" ? (
                     <>
-                      {/* <TextField
-                        name={element.name}
-                        type={element.type}
-                        required={element.required}
-                        id="outlined-basic"
-                        value={element.value ? element.value : inputfd}
-                        label={element.label}
-                        variant="outlined"
-                        onChange={(e) => {
-                          setInputfd(e.target.value)
-                          saveChange(fields, i+"-"+indx, e.target.name)
-                        }}
-                      ></TextField> */}
-
-                      < TextFields
+                      <TextFields
                         element={element}
                         fields={fields}
-                        indx={i+"-"+ indx}
+                        indx={i + "-" + indx}
                         saveChange={saveChange}
                       />
                     </>
                   ) : (
                     <>
-                    {/* {nestedFormContent(element, indx)} */}
-                        <RenderNastedForm
-                          element={element}
-                          index={i + ";" + indx}
-                          handleAdd={handleAdd}
-                          handleDetele={handleDetele}
-                          saveChange={saveChange}
-                        />
+                      {/* {nestedFormContent(element, indx)} */}
+                      <RenderNastedForm
+                        element={element}
+                        index={i + ";" + indx}
+                        handleAdd={handleAdd}
+                        handleDetele={handleDetele}
+                        saveChange={saveChange}
+                      />
                     </>
                   )}
                 </>
@@ -117,38 +97,14 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
     } else if (fields.type == "boolean") {
       return (
         <>
-
-        <CheckBoxFields
-            element={fields}
-            index={i}
-            saveChange={saveChange}
-          />
-          {/* <Typography variant="h6" gutterBottom>
-            <Checkbox />
-            {fields.label}
-          </Typography> */}
+          <CheckBoxFields element={fields} index={i} saveChange={saveChange} />
         </>
       );
     } else if (fields.type == "enum") {
-
       return (
         <>
           <FormControl variant="outlined">
-
-            <SelectFields
-              fields={fields}
-              indx={i}
-              saveChange={saveChange}
-              />
-            {/* <select style={{padding: 10, border: '1px solid lightgray',borderRadius: 5}}>
-              {fields.options.map((opt: any) => {
-                return (
-                  <>
-                    <option value={opt.value}>{opt.label}</option>
-                  </>
-                );
-              })}
-            </select> */}
+            <SelectFields fields={fields} indx={i} saveChange={saveChange} />
           </FormControl>
         </>
       );
@@ -170,36 +126,24 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                 <>
                   {nestedObject.type !== "object" ? (
                     <>
-                    {/* {nestedFormContent(nestedObject, nestedObjIndex)} */}
-                    {/* <TextField
-                        name={nestedObject.name}
-                        type={nestedObject.type}
-                        required={nestedObject.required}
-                        id="outlined-basic"
-                        label={nestedObject.label}
-                        variant="outlined"
-                        onChange={(e) => {
-                          saveChange(fields, i, e.target.value)
-                        }}
-                      ></TextField> */}
                       <TextFields
                         fields={fields}
                         indx={i}
                         saveChange={saveChange}
                         element={nestedObject}
-                        />
+                      />
                     </>
                   ) : (
                     <>
-                    <div
-                      style={{
-                        display:"flex",
-                        alignItems: "center"
-                      }}
-                    >
-                    <RenderNastedForm
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <RenderNastedForm
                           element={nestedObject}
-                          index={i + "-" +nestedObjIndex}
+                          index={i + "-" + nestedObjIndex}
                           handleAdd={handleAdd}
                           handleDetele={handleDetele}
                           saveChange={saveChange}
@@ -209,17 +153,17 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
                             marginTop: "20px",
                             width: "100px",
                             height: "50px",
-                            marginLeft: 20
+                            marginLeft: 20,
                           }}
-                          disabled={fields.item.length> 1 ? false : true}
+                          disabled={fields.item.length > 1 ? false : true}
                           variant="outlined"
                           onClick={() => {
-                            handleDetele(nestedObjIndex, fields)
+                            handleDetele(nestedObjIndex, fields);
                           }}
                         >
                           Remove
                         </Button>
-                        </div>
+                      </div>
                     </>
                   )}
                 </>
@@ -243,19 +187,18 @@ export const RenderForm = ({ element, index, handleAdd, handleDetele, saveChange
           </Paper>
         </Paper>
       );
-    }else{
-      return(
+    } else {
+      return (
         <>
-      <Paper>
-        <Box>
-        <Typography variant="h5" gutterBottom>
-          invalid type at properties[{index}].type={element.type}
-          </Typography>
-        </Box>
-      </Paper>
-      </>
-      )
-
+          <Paper>
+            <Box>
+              <Typography variant="h5" gutterBottom>
+                invalid type at properties[{index}].type={element.type}
+              </Typography>
+            </Box>
+          </Paper>
+        </>
+      );
     }
   };
 

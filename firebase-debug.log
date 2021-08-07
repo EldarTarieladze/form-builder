@@ -1,0 +1,21 @@
+[debug] [2021-08-07T16:06:29.403Z] ----------------------------------------------------------------------
+[debug] [2021-08-07T16:06:29.405Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\user\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-08-07T16:06:29.405Z] CLI Version:   9.16.0
+[debug] [2021-08-07T16:06:29.406Z] Platform:      win32
+[debug] [2021-08-07T16:06:29.406Z] Node Version:  v14.17.4
+[debug] [2021-08-07T16:06:29.406Z] Time:          Sat Aug 07 2021 20:06:29 GMT+0400 (Georgia Standard Time)
+[debug] [2021-08-07T16:06:29.407Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-08-07T16:06:29.412Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-08-07T16:06:29.412Z] > authorizing via signed-in user (tarieladze99@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\user\Documents\GitHub\form-builder
+
