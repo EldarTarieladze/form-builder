@@ -3,9 +3,14 @@ import { useState } from 'react'
 import { Layout } from 'Layout'
 import { studentProfileSchema } from 'schemas/student-profile'
 import { ResultDialog } from 'ResultDialog'
+import { db } from 'fire'
 
 export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
+
+    const saveInDatabase = (jsonData: any) => {
+        db.collection("formData").add(jsonData);
+    }
 
   return (
     <Layout
@@ -25,6 +30,7 @@ export const App = () => {
               // schema={studentProfileSchema}
               onSubmit={values => {
                 setSubmittedData(values)
+                saveInDatabase(values)
                 // Send data to Firestore here.
               }}
             />
