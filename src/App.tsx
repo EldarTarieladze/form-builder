@@ -1,7 +1,6 @@
 import { FormBuilder } from 'lib/form-builder'
 import { useState } from 'react'
 import { Layout } from 'Layout'
-import { studentProfileSchema } from 'schemas/student-profile'
 import { ResultDialog } from 'ResultDialog'
 import { db } from 'fire'
 
@@ -9,7 +8,11 @@ export const App = () => {
   const [submittedData, setSubmittedData] = useState<any>(null)
 
     const saveInDatabase = (jsonData: any) => {
-        db.collection("formData").add(jsonData);
+      try{
+        db.collection("formData").add(submittedData)
+      }catch(err){
+        console.log(err)
+      }
     }
 
   return (
