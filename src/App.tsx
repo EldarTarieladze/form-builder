@@ -9,7 +9,7 @@ export const App = () => {
 
     const saveInDatabase = (jsonData: any) => {
       try{
-        db.collection("formData").add(submittedData)
+        db.collection("formData").add(jsonData)
       }catch(err){
         console.log(err)
       }
