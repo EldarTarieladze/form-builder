@@ -40,7 +40,10 @@ export const App = () => {
 
             <ResultDialog
               data={submittedData}
-              onClose={() => setSubmittedData(null)}
+              onClose={() => {
+                setSubmittedData(null)
+                location.reload()
+              }}
             />
           </>
         )
